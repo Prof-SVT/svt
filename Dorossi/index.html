@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دروسي في علوم الحياة والأرض</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#4CAF50">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #f4f4f9;
+            overflow: hidden; /* لمنع ظهور شريطي تمرير */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe src="https://script.google.com/macros/s/AKfycbxAJ1tsR9l-E9uqCo47h3zGLLd6nsCUgKWBpX8XnDOWfLUZwcVFRkAE6WLzAPoYiEpDNA/exec"></iframe>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('تم تسجيل Service Worker بنجاح:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('فشل تسجيل Service Worker:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
