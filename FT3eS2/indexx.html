@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVT - Je me prépare à l'examen régional</title>
+    <title>SVT - Feuilles de travail interactives</title>
     <style>
         :root {
-            /* الألوان الأساسية المستوحاة من الملف الأصلي */
-            --color-teal: #0091B9; 
-            --color-light-blue: #BAE4F0; 
-            --color-dark-blue: #004E9B; 
-            --color-orange: #FF6500; 
-            --color-yellow: #FFD500; 
-            
-            --bg-color: #eef2f5; 
+            --color-teal: #0091B9;
+            --color-light-blue: #BAE4F0;
+            --color-dark-blue: #004E9B;
+            --color-orange: #FF6500;
+            --color-yellow: #FFD500;
+
+            --bg-color: #eef2f5;
             --card-bg: #ffffff;
             --text-main: #2c3e50;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body {
@@ -29,22 +32,20 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            box-sizing: border-box;
         }
 
         .container {
-            max-width: 1000px; /* Légèrement élargi pour les titres plus longs */
+            max-width: 900px;
             width: 100%;
             background: var(--card-bg);
             padding: 50px;
-            border-radius: 20px; 
+            border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 78, 155, 0.08);
         }
 
-        /* --- تنسيق الترويسة --- */
         header {
             text-align: center;
-            margin-bottom: 40px; 
+            margin-bottom: 40px;
             border-bottom: 3px solid var(--color-light-blue);
             padding-bottom: 30px;
         }
@@ -53,7 +54,7 @@
             max-width: 350px;
             width: 100%;
             height: auto;
-            margin-bottom: 15px; 
+            margin-bottom: 15px;
         }
 
         .college-name {
@@ -61,7 +62,7 @@
             color: var(--color-dark-blue);
             font-weight: 800;
             text-transform: uppercase;
-            margin: 0; 
+            margin: 0;
         }
 
         .subject-name {
@@ -70,19 +71,17 @@
             font-size: 0.85rem;
             color: var(--color-orange);
             font-weight: 700;
-            margin: 10px 0; 
+            margin: 10px 0;
         }
 
-        /* العنوان الرئيسي الجديد (كبير وبارز) */
         h1 {
             font-size: 2rem;
             font-weight: 900;
             color: var(--color-dark-blue);
-            margin: 20px 0 5px 0; 
+            margin: 20px 0 5px 0;
             line-height: 1.2;
         }
 
-        /* العنوان الفرعي (أصغر وبلون مغاير) */
         .sub-heading {
             font-size: 1.05rem;
             font-weight: 700;
@@ -96,31 +95,23 @@
             font-size: 1rem;
             color: var(--color-dark-blue);
             font-weight: 600;
-            margin-top: 10px; 
+            margin-top: 10px;
             display: inline-block;
             background: #f4f8fb;
             padding: 5px 15px;
             border-radius: 50px;
         }
 
-        /* --- تصميم الأزرار --- */
-        .section-title {
-            text-align: center;
-            font-size: 1.5rem;
-            color: var(--text-main);
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-
-        .exercises-grid {
+        .worksheets-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
 
-        .btn-exercice {
+        .btn-worksheet {
             display: flex;
             align-items: center;
+            min-height: 78px;
             background: #ffffff;
             border: 2px solid #e1e8ed;
             color: var(--color-dark-blue);
@@ -130,62 +121,76 @@
             font-size: 1.05rem;
             font-weight: 700;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        border-color 0.4s ease,
+                        color 0.4s ease,
+                        box-shadow 0.4s ease;
             position: relative;
             overflow: hidden;
             z-index: 1;
         }
 
-        .btn-exercice:hover {
+        .btn-worksheet:hover,
+        .btn-worksheet:focus-visible {
             transform: translateY(-5px);
             border-color: transparent;
             color: #ffffff;
             box-shadow: 0 15px 25px rgba(0, 145, 185, 0.25);
         }
 
-        .btn-exercice::before {
+        .btn-worksheet:focus-visible {
+            outline: 3px solid var(--color-yellow);
+            outline-offset: 4px;
+        }
+
+        .btn-worksheet::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: linear-gradient(135deg, var(--color-teal) 0%, var(--color-dark-blue) 100%);
             z-index: -1;
             opacity: 0;
             transition: opacity 0.4s ease;
         }
 
-        .btn-exercice:hover::before {
+        .btn-worksheet:hover::before,
+        .btn-worksheet:focus-visible::before {
             opacity: 1;
         }
 
         .icon-left {
+            flex: 0 0 auto;
             margin-right: 15px;
             width: 28px;
             height: 28px;
             fill: var(--color-orange);
-            min-width: 28px;
             transition: fill 0.4s ease, transform 0.4s ease;
         }
 
-        .btn-exercice:hover .icon-left {
+        .btn-worksheet:hover .icon-left,
+        .btn-worksheet:focus-visible .icon-left {
             fill: #ffffff;
             transform: scale(1.1);
         }
 
         .btn-text {
             flex-grow: 1;
-            line-height: 1.3;
         }
 
         .icon-right {
+            flex: 0 0 auto;
             width: 20px;
             height: 20px;
+            margin-left: 12px;
             fill: var(--color-light-blue);
-            min-width: 20px;
-            margin-left: 10px;
             transition: transform 0.4s ease, fill 0.4s ease;
         }
 
-        .btn-exercice:hover .icon-right {
+        .btn-worksheet:hover .icon-right,
+        .btn-worksheet:focus-visible .icon-right {
             fill: #ffffff;
             transform: translateX(5px);
         }
@@ -201,13 +206,41 @@
             border-top: 1px solid #e1e8ed;
         }
 
-        /* استجابة الشاشات الصغيرة */
         @media (max-width: 600px) {
-            .container { padding: 30px 20px; }
-            h1 { font-size: 1.5rem; }
-            .sub-heading { font-size: 0.95rem; }
-            .college-name { font-size: 0.95rem; }
-            .exercises-grid { grid-template-columns: 1fr; }
+            body {
+                padding: 24px 12px;
+                align-items: flex-start;
+            }
+
+            .container {
+                padding: 30px 20px;
+                border-radius: 16px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .sub-heading {
+                font-size: 0.95rem;
+            }
+
+            .college-name {
+                font-size: 0.95rem;
+            }
+
+            .subject-name {
+                letter-spacing: 2px;
+            }
+
+            .worksheets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-worksheet {
+                font-size: 1rem;
+                padding: 16px 18px;
+            }
         }
     </style>
 </head>
@@ -215,108 +248,94 @@
 
 <div class="container">
     <header>
-        <img src="https://g.top4top.io/p_3670kidar1.png" alt="Logo Collège" class="logo-img">
+        <img src="https://g.top4top.io/p_3670kidar1.png" alt="Logo du Collège Sidi Abd Elaziz" class="logo-img">
         <div class="college-name">Collège Sidi Abd Elaziz - Oued Zem</div>
         <div class="subject-name">Sciences de la vie et de la terre</div>
-        
-        <!-- العنوان الرئيسي الجديد -->
+
         <h1>Je me prépare à l'examen régional en SVT</h1>
-        <!-- العنوان الفرعي (أصغر وبلون مختلف) -->
         <h2 class="sub-heading">Feuilles de travail interactives</h2>
-        
+
         <div class="teacher-name">Niveau : <strong>3APIC</strong></div>
     </header>
 
     <main>
-        <div class="exercises-grid">
-            <!-- Exercice 1 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <div class="worksheets-grid">
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">La sensibilité consciente</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 2 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index1.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index1.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">La motricité volontaire</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 3 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index2.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index2.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">La motricité involontaire</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 4 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index3.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index3.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">L'arc réflexe et la moelle épinière</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 5 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index4.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index4.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">Le système musculaire</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 6 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index5.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index5.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">Les microorganismes</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 7 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index6.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index6.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <span class="btn-text">Les réponses immunitaires non spécifiques</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 8 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index7.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                <span class="btn-text">Les Réponses Immunitaires Spécifiques</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index7.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span class="btn-text">Les réponses immunitaires spécifiques</span>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 9 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index8.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                <span class="btn-text">Aider le Système Immunitaire</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index8.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span class="btn-text">Aider le système immunitaire</span>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 10 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index9.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                <span class="btn-text">Origine et Coopération Cellulaire</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index9.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span class="btn-text">Origine et coopération cellulaire</span>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 11 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index10.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                <span class="btn-text">Dysfonctionnements de l'Immunité</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index10.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span class="btn-text">Dysfonctionnements de l'immunité</span>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
 
-            <!-- Exercice 12 -->
-            <a href="https://prof-svt.github.io/svt/FT3eS2/index11.html" target="_blank" class="btn-exercice">
-                <svg class="icon-left" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                <span class="btn-text">La Transfusion Sanguine</span>
-                <svg class="icon-right" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            <a href="https://prof-svt.github.io/svt/FT3eS2/index11.html" target="_blank" rel="noopener noreferrer" class="btn-worksheet">
+                <svg class="icon-left" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span class="btn-text">La transfusion sanguine</span>
+                <svg class="icon-right" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
         </div>
     </main>
 
     <footer>
-        &copy; 2026 - Tous droits réservés – S. EL OMRANI
+        &copy; 2026 - Tous droits réservés - S. EL OMRANI
     </footer>
 </div>
 
