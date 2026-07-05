@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquences MOOC - SVT | Collèges Pionniers</title>
+    
+    <!-- Intégration de Tailwind CSS pour le style -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Intégration de FontAwesome pour les icônes (YouTube) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Configuration personnalisée de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1d4ed8', // Bleu institutionnel
+                        secondary: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f1f5f9;
+        }
+        .unit-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .unit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .video-btn {
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .video-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- En-tête de la page -->
+    <header class="bg-white shadow-md border-b-4 border-primary pb-8 pt-6 px-4">
+        <div class="max-w-4xl mx-auto text-center flex flex-col items-center">
+            <!-- Logo -->
+            <img src="https://g.top4top.io/p_3670kidar1.png" alt="Ministère de l'Éducation Nationale" class="h-32 object-contain mb-6">
+            
+            <!-- Hiérarchie Institutionnelle -->
+            <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                Académie Régionale d'Éducation et de Formation Béni Mellal-Khénifra
+            </h1>
+            <h2 class="text-lg md:text-xl font-semibold text-gray-700 mb-4">
+                Direction Provinciale de Khouribga
+            </h2>
+            
+            <!-- Matière et Cible -->
+            <div class="inline-block bg-blue-100 border border-blue-200 text-blue-800 px-6 py-2 rounded-full font-bold text-lg mb-4 shadow-sm">
+                Matière : Sciences de la Vie et de la Terre (SVT)
+            </div>
+            <p class="text-gray-500 font-medium italic">
+                Programme de formation continue pour les professeurs des Collèges Pionniers
+            </p>
+        </div>
+    </header>
+
+    <!-- Conteneur principal pour le contenu du MOOC -->
+    <main class="max-w-4xl mx-auto px-4 py-10" id="mooc-container">
+        <!-- Le contenu sera injecté ici par JavaScript -->
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-400">© 2026 - Plateforme de formation des Collèges Pionniers.</p>
+        </div>
+    </footer>
+
+    <!-- Script JavaScript pour structurer et afficher les données -->
+    <script>
+        // Base de données des séquences du MOOC
+        const moocData = [
+            {
+                titre: "UNITÉ 1 : Vision et modèle des Collèges Pionniers",
+                sequences: [
+                    { nom: "S1 : Quelle est la situation des apprentissages au cycle collégial ?", liens: ["https://youtu.be/xHciHe3pKK4"] },
+                    { nom: "S2 : Quelles pistes d’action pour améliorer les apprentissages des élèves ?", liens: ["https://youtu.be/AVk9ffyAKi4"] },
+                    { nom: "S3 : Quelles sont les autres problématiques au cycle collégial ?", liens: ["https://youtu.be/AWToTWjjKcw"] },
+                    { nom: "S4 : Comment peut-on apporter une réponse concrète et cohérente à ces problématiques au sein des collèges ?", liens: ["https://youtu.be/i0zJTIb4KF4"] },
+                    { nom: "S5 : Pourquoi les activités parascolaires sont essentielles pour les élèves ?", liens: ["https://youtu.be/TnibHd5BQOg"] },
+                    { nom: "S6 : Comment la cellule de veille permet d’identifier et d’accompagner les élèves en difficulté ou à risque ?", liens: ["https://youtu.be/A13nGpe8bgE"] }
+                ]
+            },
+            {
+                titre: "UNITÉ 2 : Modèle pédagogique général",
+                sequences: [
+                    { nom: "S1 : Un modèle pédagogique pour faire réussir tous les élèves", liens: ["https://youtu.be/Gkkg9hHjLJk"] },
+                    { nom: "S2 : La remédiation intensive en début d’année : pourquoi et comment ?", liens: ["https://youtu.be/s_SIqlSOBKw"] },
+                    { nom: "S3 : La période d’installation des nouveaux apprentissages", liens: ["https://youtu.be/9nx-YtX5W9E"] }
+                ]
+            },
+            {
+                titre: "UNITÉ 3 : Pratiques Pédagogiques efficaces",
+                sequences: [
+                    { nom: "S1 : qu’est-ce qu’une pratique pédagogique efficace ?", liens: ["https://youtu.be/8VglEIa5RJ0"] },
+                    { nom: "S2 : C’est quoi, apprendre ?", liens: ["https://youtu.be/ChjB-6e1lgI"] },
+                    { nom: "S3 : Les 12 principes de l’enseignement efficace et ses fondements théoriques", liens: ["https://youtu.be/fem6yBAO6pk"] },
+                    { nom: "S4 : L’enseignement explicite : c’est quoi ?", liens: ["https://youtu.be/sOKOg8xHTWc"] },
+                    { nom: "S5 : Comment enseigner explicitement ?", liens: ["https://youtu.be/UVvJdIuDdb4"] },
+                    { nom: "S6 : La tâche : objectif d’apprentissage précis", liens: ["https://youtu.be/nCbMbZu86WU"] },
+                    { nom: "S7 : Activation des prérequis", liens: ["https://youtu.be/ct7e7XadROs", "https://youtu.be/h2MXM10Vv4w"] },
+                    { nom: "S8 : Déclaration de l’objectif", liens: ["https://youtu.be/5-rwYFdD7TA", "https://youtu.be/JlPLuBq0X7c"] },
+                    { nom: "S9 : Modelage", liens: ["https://youtu.be/0DIzMMEtKgw", "https://youtu.be/e7YTLPGJIC0"] },
+                    { nom: "S10 : « l’enseignement des notions »", liens: ["https://www.youtube.com/watch?v=Sicp-Yh_WGM"] },
+                    { nom: "S11 : Pratique guidée collective", liens: ["https://youtu.be/7OAXqTFb0tY", "https://youtu.be/k0ing-tpvto"] },
+                    { nom: "S12 : Pratique guidée en binômes", liens: ["https://youtu.be/mWZTP02q6Zw", "https://youtu.be/joKE7Swkxvg"] },
+                    { nom: "S13 : Pratique autonome", liens: ["https://youtu.be/whdKx5KYbBI", "https://youtu.be/XMUe_-Ijg3s"] },
+                    { nom: "S14 : Feedback", liens: ["https://youtu.be/HeS2UcvOeGA", "https://youtu.be/vqKTdLfKZYA"] },
+                    { nom: "S15 : Clôture", liens: ["https://youtu.be/DjsOZ8i-NSo", "https://youtu.be/_wTezEs20CE"] },
+                    { nom: "S16 : Bien se préparer à la séance", liens: ["https://youtu.be/7OAXqTFb0tY"] }
+                ]
+            },
+            {
+                titre: "UNITÉ 4 : Gestion des comportements",
+                sequences: [
+                    { nom: "S1 : Pourquoi gérer les comportements ?", liens: ["https://youtu.be/5XlcRsc7Y94"] },
+                    { nom: "S2 : Comment peut-on agir sur les comportements ?", liens: ["https://youtu.be/BqvxIKY7GTc"] },
+                    { nom: "S3 : Comment enseigner les comportements attendus ?", liens: ["https://youtu.be/wVneyE2Fn0M"] },
+                    { nom: "S4 : Comment gérer les écarts de comportements ?", liens: ["https://youtu.be/yx5vZ74J-EA"] }
+                ]
+            },
+            {
+                titre: "UNITÉ 5 : Remédiation intensive",
+                sequences: [
+                    { nom: "S1 : Pourquoi la remédiation intensive en début d’année ?", liens: ["https://youtu.be/QbfHx00Wazc"] },
+                    { nom: "S2 : Quels sont les fondamentaux à maîtriser pendant la période de remédiation ?", liens: ["https://youtu.be/edgx1WQEzH0"] },
+                    { nom: "S3 : Quels sont les principes de la remédiation ?", liens: ["https://youtu.be/yAumpi7w6-Q"] },
+                    { nom: "S4 : Passation des tests", liens: ["https://youtu.be/FV0KUIxaDrI"] },
+                    { nom: "S5 : Quels types de contenus sont prévus pour les différents parcours de remédiation ?", liens: ["https://youtu.be/yy2VERwjWmg"] },
+                    { nom: "S6 : Comment suivre et évaluer la progression des élèves ?", liens: ["https://youtu.be/D8EbvRiWQ0Q"] },
+                    { nom: "S7 : Comment gérer l’hétérogénéité ?", liens: ["https://youtu.be/huNi70_U1NU"] }
+                ]
+            }
+        ];
+
+        // Fonction pour générer l'interface
+        function renderMOOC() {
+            const container = document.getElementById('mooc-container');
+            
+            moocData.forEach((unite, index) => {
+                // Création de la carte pour chaque Unité
+                const unitElement = document.createElement('div');
+                unitElement.className = "unit-card bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden mb-8";
+                
+                // En-tête de l'unité
+                const unitHeader = document.createElement('div');
+                unitHeader.className = "bg-primary text-white p-4 md:p-5 flex items-center justify-between cursor-pointer hover:bg-blue-800 transition-colors";
+                unitHeader.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="bg-white text-primary font-bold rounded-full h-10 w-10 flex items-center justify-center shrink-0 mr-4 shadow-inner">
+                            ${index + 1}
+                        </div>
+                        <h2 class="text-xl md:text-2xl font-bold tracking-wide">${unite.titre}</h2>
+                    </div>
+                    <div class="shrink-0 ml-4 transition-transform duration-300 transform" id="chevron-${index}">
+                        <i class="fa-solid fa-chevron-down text-xl"></i>
+                    </div>
+                `;
+                unitElement.appendChild(unitHeader);
+                
+                // Liste des séquences
+                const sequenceList = document.createElement('ul');
+                sequenceList.id = `list-${index}`;
+                sequenceList.className = "divide-y divide-gray-100 hidden"; // Les listes sont masquées par défaut
+                
+                unite.sequences.forEach(seq => {
+                    const listItem = document.createElement('li');
+                    listItem.className = "p-4 md:p-5 hover:bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors duration-150";
+                    
+                    // Titre de la séquence
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = "flex items-start flex-1";
+                    titleDiv.innerHTML = `
+                        <i class="fa-solid fa-play text-gray-300 mt-1 mr-3 text-sm"></i>
+                        <span class="font-medium text-gray-800 leading-snug">${seq.nom}</span>
+                    `;
+                    listItem.appendChild(titleDiv);
+                    
+                    // Conteneur des boutons YouTube
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = "flex flex-wrap gap-2 md:justify-end ml-7 md:ml-0";
+                    
+                    // Génération dynamique des boutons en fonction du nombre de liens
+                    seq.liens.forEach((lien, lienIndex) => {
+                        if (lien && lien.trim() !== "") {
+                            const btn = document.createElement('a');
+                            btn.href = lien;
+                            btn.target = "_blank";
+                            btn.rel = "noopener noreferrer";
+                            
+                            // Si plus d'un lien, ajouter un numéro (ex: Partie 1, Partie 2)
+                            const btnText = seq.liens.length > 1 ? `Vidéo ${lienIndex + 1}` : `Voir la vidéo`;
+                            
+                            btn.className = "video-btn inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-sm w-full sm:w-auto justify-center";
+                            btn.innerHTML = `<i class="fa-brands fa-youtube text-lg"></i> <span>${btnText}</span>`;
+                            actionsDiv.appendChild(btn);
+                        }
+                    });
+                    
+                    listItem.appendChild(actionsDiv);
+                    sequenceList.appendChild(listItem);
+                });
+                
+                unitElement.appendChild(sequenceList);
+                container.appendChild(unitElement);
+
+                // Événement pour ouvrir/fermer l'unité au clic
+                unitHeader.addEventListener('click', () => {
+                    const list = document.getElementById(`list-${index}`);
+                    const chevron = document.getElementById(`chevron-${index}`);
+                    
+                    if (list.classList.contains('hidden')) {
+                        list.classList.remove('hidden');
+                        chevron.classList.add('rotate-180');
+                    } else {
+                        list.classList.add('hidden');
+                        chevron.classList.remove('rotate-180');
+                    }
+                });
+            });
+        }
+
+        // Exécuter le rendu quand le DOM est chargé
+        document.addEventListener('DOMContentLoaded', renderMOOC);
+    </script>
+</body>
+</html>
