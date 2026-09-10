@@ -416,6 +416,39 @@ footer {
   }
 }
 
+
+/* التثبيت الذكي للأقسام على الشاشات الصغيرة */
+@media (max-width: 700px) {
+  .section {
+    scroll-margin-top: 12px;
+    transition:
+      border-color .32s ease,
+      box-shadow .32s ease,
+      transform .32s ease;
+  }
+
+  .section.snap-focus {
+    border-color: rgba(34, 157, 188, .34);
+    box-shadow:
+      0 13px 34px rgba(2, 48, 71, .10),
+      0 0 0 3px rgba(142, 202, 230, .10);
+  }
+
+  .section.activities.snap-focus {
+    border-color: rgba(251, 133, 1, .26);
+    box-shadow:
+      0 13px 34px rgba(2, 48, 71, .09),
+      0 0 0 3px rgba(254, 183, 7, .09);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section,
+  .hero {
+    transition-duration: .01ms !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -498,14 +531,24 @@ footer {
 <script>
 (() => {
   const hero = document.getElementById('school-entry-card');
+  const sections = Array.from(document.querySelectorAll('main.page > section.section'));
   const mobileQuery = window.matchMedia('(max-width: 700px)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (!hero) return;
 
   let collapsed = false;
   let lastScrollY = window.scrollY;
   let collapsedAt = 0;
   let touchStartY = null;
-  let lastTouchY = null;
+  let userTouching = false;
+
+  let settleTimer = null;
+  let snapAnimation = null;
+  let snapLock = false;
+  let lastSnapAt = 0;
+  let focusedSection = null;
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
   const collapseHero = () => {
     if (!mobileQuery.matches || collapsed) return;
@@ -520,7 +563,141 @@ footer {
     collapsed = false;
   };
 
+  const clearFocus = () => {
+    if (focusedSection) focusedSection.classList.remove('snap-focus');
+    focusedSection = null;
+  };
+
+  const focusSection = (section) => {
+    if (focusedSection && focusedSection !== section) {
+      focusedSection.classList.remove('snap-focus');
+    }
+    focusedSection = section;
+    section.classList.add('snap-focus');
+
+    window.setTimeout(() => {
+      if (focusedSection === section) {
+        section.classList.remove('snap-focus');
+        focusedSection = null;
+      }
+    }, 900);
+  };
+
+  const cancelSnapAnimation = () => {
+    if (snapAnimation !== null) {
+      cancelAnimationFrame(snapAnimation);
+      snapAnimation = null;
+    }
+    snapLock = false;
+  };
+
+  const visibleScore = (section) => {
+    const rect = section.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const visible = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
+
+    // إذا كان القسم أطول من الشاشة، نقيس ظهوره مقارنة بالمساحة القصوى الممكن رؤيتها.
+    const basis = Math.max(1, Math.min(rect.height, viewportHeight));
+    const ratio = visible / basis;
+
+    const sectionCenter = rect.top + rect.height / 2;
+    const viewportCenter = viewportHeight / 2;
+    const centerDistance = Math.abs(sectionCenter - viewportCenter) / viewportHeight;
+
+    return { section, rect, ratio, centerDistance };
+  };
+
+  const pickSnapCandidate = () => {
+    if (!mobileQuery.matches || !sections.length || window.scrollY <= 8) return null;
+
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const candidates = sections
+      .map(visibleScore)
+      .filter(({ rect, ratio }) => {
+        const crossesReadingZone = rect.top < viewportHeight * 0.72 && rect.bottom > viewportHeight * 0.28;
+        return ratio >= 0.52 && crossesReadingZone;
+      })
+      .sort((a, b) => {
+        const scoreA = a.ratio - a.centerDistance * 0.16;
+        const scoreB = b.ratio - b.centerDistance * 0.16;
+        return scoreB - scoreA;
+      });
+
+    return candidates[0] || null;
+  };
+
+  const animateScrollTo = (targetY, section) => {
+    cancelSnapAnimation();
+
+    const startY = window.scrollY;
+    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const destination = clamp(targetY, 0, maxY);
+    const distance = destination - startY;
+
+    if (Math.abs(distance) < 8) {
+      focusSection(section);
+      lastSnapAt = performance.now();
+      return;
+    }
+
+    if (reduceMotion.matches) {
+      window.scrollTo(0, destination);
+      focusSection(section);
+      lastSnapAt = performance.now();
+      return;
+    }
+
+    const duration = clamp(330 + Math.abs(distance) * 0.16, 360, 560);
+    const startTime = performance.now();
+    snapLock = true;
+
+    // cubic ease-in-out لإحساس هادئ وغير مفاجئ.
+    const ease = (t) => t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const step = (now) => {
+      const progress = clamp((now - startTime) / duration, 0, 1);
+      window.scrollTo(0, startY + distance * ease(progress));
+
+      if (progress < 1) {
+        snapAnimation = requestAnimationFrame(step);
+      } else {
+        snapAnimation = null;
+        snapLock = false;
+        lastSnapAt = performance.now();
+        focusSection(section);
+        lastScrollY = window.scrollY;
+      }
+    };
+
+    snapAnimation = requestAnimationFrame(step);
+  };
+
+  const snapToCandidate = () => {
+    if (!mobileQuery.matches || userTouching || snapLock) return;
+    if (performance.now() - lastSnapAt < 480) return;
+
+    const candidate = pickSnapCandidate();
+    if (!candidate) return;
+
+    // نترك هامشًا علويًا صغيرًا ليظهر القسم ككتلة مستقلة ومريحة بصريًا.
+    const topGap = 12;
+    const targetY = window.scrollY + candidate.rect.top - topGap;
+    animateScrollTo(targetY, candidate.section);
+  };
+
+  const scheduleSnap = (delay = 115) => {
+    if (!mobileQuery.matches || snapLock) return;
+    clearTimeout(settleTimer);
+    settleTimer = window.setTimeout(snapToCandidate, delay);
+  };
+
   const syncForViewport = () => {
+    clearTimeout(settleTimer);
+    cancelSnapAnimation();
+    clearFocus();
+
     if (!mobileQuery.matches) {
       revealHero();
       return;
@@ -539,12 +716,12 @@ footer {
     const movingDownPage = y > lastScrollY + 2;
     const movingUpPage = y < lastScrollY - 2;
 
-    // يبدأ الطي بمجرد مغادرة أعلى الصفحة أثناء التمرير نحو المحتوى السفلي.
+    // طي بطاقة الدخول المدرسي بمجرد التوجه نحو المحتوى السفلي.
     if (!collapsed && y > 24 && movingDownPage) {
       collapseHero();
     }
 
-    // دعم الماوس/لوحة اللمس عند تصغير النافذة: لا تظهر البطاقة إلا عند أعلى الصفحة.
+    // لا تظهر بطاقة الدخول المدرسي من جديد إلا عند أعلى الصفحة فعليًا.
     if (
       collapsed &&
       y <= 1 &&
@@ -555,13 +732,17 @@ footer {
     }
 
     lastScrollY = y;
+
+    // بعد هدوء التمرير قليلًا نثبّت القسم الذي أصبح ظاهرًا بما يكفي.
+    if (!snapLock && !userTouching) scheduleSnap(105);
   }, { passive: true });
 
-  // على الهاتف، السحب إلى الأسفل عند أعلى الصفحة هو الإشارة الأوضح لإظهار البطاقة من جديد.
   window.addEventListener('touchstart', (event) => {
     if (!mobileQuery.matches || !event.touches.length) return;
+    userTouching = true;
     touchStartY = event.touches[0].clientY;
-    lastTouchY = touchStartY;
+    clearTimeout(settleTimer);
+    cancelSnapAnimation();
   }, { passive: true });
 
   window.addEventListener('touchmove', (event) => {
@@ -569,7 +750,6 @@ footer {
 
     const currentY = event.touches[0].clientY;
     const fingerDelta = currentY - touchStartY;
-    lastTouchY = currentY;
 
     if (collapsed && window.scrollY <= 1 && fingerDelta > 14) {
       revealHero();
@@ -577,8 +757,23 @@ footer {
   }, { passive: true });
 
   window.addEventListener('touchend', () => {
+    userTouching = false;
     touchStartY = null;
-    lastTouchY = null;
+    scheduleSnap(70);
+  }, { passive: true });
+
+  window.addEventListener('touchcancel', () => {
+    userTouching = false;
+    touchStartY = null;
+    scheduleSnap(90);
+  }, { passive: true });
+
+  // دعم الماوس ولوحة اللمس عند اختبار التصميم في نافذة صغيرة.
+  window.addEventListener('wheel', () => {
+    if (!mobileQuery.matches) return;
+    clearTimeout(settleTimer);
+    cancelSnapAnimation();
+    scheduleSnap(135);
   }, { passive: true });
 
   if (typeof mobileQuery.addEventListener === 'function') {
@@ -586,6 +781,10 @@ footer {
   } else if (typeof mobileQuery.addListener === 'function') {
     mobileQuery.addListener(syncForViewport);
   }
+
+  window.addEventListener('resize', () => {
+    if (mobileQuery.matches) scheduleSnap(160);
+  }, { passive: true });
 
   syncForViewport();
 })();
