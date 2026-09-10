@@ -384,6 +384,38 @@ footer {
   .section-title { font-size: 1rem; }
   .service p { font-size: 0.82rem; }
 }
+
+
+/* طي بطاقة الدخول المدرسي على الشاشات الصغيرة */
+@media (max-width: 700px) {
+  .hero {
+    max-height: 420px;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      max-height .38s ease,
+      opacity .22s ease,
+      transform .32s ease,
+      margin .38s ease,
+      padding .38s ease,
+      border-width .22s ease;
+    will-change: max-height, opacity, transform;
+  }
+
+  .hero.mobile-collapsed {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-12px);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    pointer-events: none;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -396,7 +428,7 @@ footer {
 <span>الثانوية الإعدادية سيدي عبد العزيز - وادي زم</span>
 </div>
 </header>
-<section class="hero">
+<section class="hero" id="school-entry-card">
   <span class="eyebrow">خدمات المؤسسة</span>
   <h1>الدخول المدرسي</h1>
   <span class="year">السنة الدراسية 2026 - 2027</span>
@@ -462,5 +494,102 @@ footer {
 </section>
 <footer>ذ. صالح العمراني - الثانوية الإعدادية سيدي عبد العزيز - وادي زم</footer>
 </main>
+
+<script>
+(() => {
+  const hero = document.getElementById('school-entry-card');
+  const mobileQuery = window.matchMedia('(max-width: 700px)');
+  if (!hero) return;
+
+  let collapsed = false;
+  let lastScrollY = window.scrollY;
+  let collapsedAt = 0;
+  let touchStartY = null;
+  let lastTouchY = null;
+
+  const collapseHero = () => {
+    if (!mobileQuery.matches || collapsed) return;
+    hero.classList.add('mobile-collapsed');
+    collapsed = true;
+    collapsedAt = performance.now();
+  };
+
+  const revealHero = () => {
+    if (!collapsed) return;
+    hero.classList.remove('mobile-collapsed');
+    collapsed = false;
+  };
+
+  const syncForViewport = () => {
+    if (!mobileQuery.matches) {
+      revealHero();
+      return;
+    }
+
+    if (window.scrollY > 24) collapseHero();
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!mobileQuery.matches) {
+      lastScrollY = window.scrollY;
+      return;
+    }
+
+    const y = Math.max(0, window.scrollY);
+    const movingDownPage = y > lastScrollY + 2;
+    const movingUpPage = y < lastScrollY - 2;
+
+    // يبدأ الطي بمجرد مغادرة أعلى الصفحة أثناء التمرير نحو المحتوى السفلي.
+    if (!collapsed && y > 24 && movingDownPage) {
+      collapseHero();
+    }
+
+    // دعم الماوس/لوحة اللمس عند تصغير النافذة: لا تظهر البطاقة إلا عند أعلى الصفحة.
+    if (
+      collapsed &&
+      y <= 1 &&
+      movingUpPage &&
+      performance.now() - collapsedAt > 450
+    ) {
+      revealHero();
+    }
+
+    lastScrollY = y;
+  }, { passive: true });
+
+  // على الهاتف، السحب إلى الأسفل عند أعلى الصفحة هو الإشارة الأوضح لإظهار البطاقة من جديد.
+  window.addEventListener('touchstart', (event) => {
+    if (!mobileQuery.matches || !event.touches.length) return;
+    touchStartY = event.touches[0].clientY;
+    lastTouchY = touchStartY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (event) => {
+    if (!mobileQuery.matches || !event.touches.length || touchStartY === null) return;
+
+    const currentY = event.touches[0].clientY;
+    const fingerDelta = currentY - touchStartY;
+    lastTouchY = currentY;
+
+    if (collapsed && window.scrollY <= 1 && fingerDelta > 14) {
+      revealHero();
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    touchStartY = null;
+    lastTouchY = null;
+  }, { passive: true });
+
+  if (typeof mobileQuery.addEventListener === 'function') {
+    mobileQuery.addEventListener('change', syncForViewport);
+  } else if (typeof mobileQuery.addListener === 'function') {
+    mobileQuery.addListener(syncForViewport);
+  }
+
+  syncForViewport();
+})();
+</script>
+
 </body>
 </html>
