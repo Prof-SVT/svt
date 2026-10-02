@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'school-timetable:' + self.registration.scope + ':';
-const CACHE_NAME = CACHE_PREFIX + 'v2-green';
+const CACHE_NAME = CACHE_PREFIX + 'v3-reference';
 const LOCAL_FILES = [
   './index.html',
   './school-timetable.webmanifest',
