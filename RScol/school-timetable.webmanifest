@@ -1,0 +1,33 @@
+{
+  "id": "./",
+  "name": "استعمالات الزمن — إعدادية سيدي عبد العزيز",
+  "short_name": "استعمالات الزمن",
+  "description": "استعمالات الزمن للإدارة والأساتذة والتلاميذ — وادي زم",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#f4fbf6",
+  "theme_color": "#f4fbf6",
+  "icons": [
+    {
+      "src": "school-timetable-assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "school-timetable-assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "school-timetable-assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
